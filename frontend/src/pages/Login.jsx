@@ -59,7 +59,7 @@ export default function Login() {
       </form>
       <p className=" text-center my-5">
         Don't have an account?
-        <Link to={"/signup"}>click here!</Link>
+        <Link to={"/signup"} className=" text-red-600 pl-2">Click here!</Link>
       </p>
     </div>
   );
