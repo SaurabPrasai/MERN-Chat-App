@@ -15,6 +15,15 @@ app.use('/api/messages',messageRoutes)
 app.use('/api/users',userRoutes)
 
 
+app.use((err,req,res,next)=>{
+        const statusCode=err.statusCode||500
+        const errorMessage=err.message||"Internal Server Error"
+        const error={
+            statusCode,
+            errorMessage
+        }
+        return res.status(statusCode).json(error)
+})
 
 app.listen(PORT,()=>{
     connectToMongoDB()

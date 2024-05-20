@@ -1,7 +1,7 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/messgae.model.js";
 
-export const sendMessage = async (req, res) => {
+export const sendMessage = async (req, res,next) => {
   try {
     const { message } = req.body;
     const { id: receiverId } = req.params;
@@ -30,11 +30,11 @@ export const sendMessage = async (req, res) => {
     // socket io functionality goes here
     return res.json(newMessage);
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    next(error)
   }
 };
 
-export const getMessage = async (req, res) => {
+export const getMessage = async (req, res,next) => {
   try {
     const { id: userToChatId } = req.params;
     const senderId = req.user._id;
@@ -49,7 +49,6 @@ export const getMessage = async (req, res) => {
     const messages = conversation.messages;
     return res.status(200).json(messages);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Internal server error" });
+   next(error)
   }
 };

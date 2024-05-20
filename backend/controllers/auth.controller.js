@@ -1,17 +1,18 @@
 import User from "../models/user.models.js";
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
+import errorHandler from "../utils/error.js";
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   const { username, password } = req.body;
   try {
     const user = await User.findOne({ username });
-    if (!user) return res.status(400).json({ error: "User doesn't exist" });
+    if (!user) return next(errorHandler(400, "User doesn't exist"));
 
     const isPasswordCorrect = bcrypt.compareSync(password, user.password);
 
     if (!isPasswordCorrect)
-      return res.status(400).json({ error: "Invalid credentials" });
+      return next(errorHandler(400, "Invalid credentials"));
 
     const { password: pass, ...rest } = user._doc;
 
@@ -19,19 +20,18 @@ export const login = async (req, res) => {
 
     res.status(201).json(rest);
   } catch (error) {
-    res.status(500).json(error.message);
+    next(error);
   }
 };
 
-export const signup = async (req, res) => {
+export const signup = async (req, res,next) => {
   const { fullName, username, password, confirmPassword, gender } = req.body;
 
-  if (password !== confirmPassword)
-    return res.status(400).json({ error: "Password don't match" });
+  if (password !== confirmPassword) return next(400, "Password don't match");
 
   let user = await User.findOne({ username });
 
-  if (user) return res.status(400).json({ error: "User already exist" });
+  if (user) return next(errorHandler(400, "User already exist"));
 
   try {
     // hash password
@@ -52,15 +52,17 @@ export const signup = async (req, res) => {
     const { password: pass, ...rest } = saveUser._doc;
     res.status(201).json(rest);
   } catch (error) {
-    res.status(500).json(error.message);
+    next(error);
   }
 };
 
-export const logout = async (req, res) => {
+export const logout = async (req, res,next) => {
   try {
-      res.cookie("access-token","",{maxAge:0}).status(200).json({message:"Logged out successfully "})
+    res
+      .cookie("access-token", "", { maxAge: 0 })
+      .status(200)
+      .json({ message: "Logged out successfully " });
   } catch (error) {
-    res.status(500).json(error.message);
-      
+    next(error);
   }
 };
