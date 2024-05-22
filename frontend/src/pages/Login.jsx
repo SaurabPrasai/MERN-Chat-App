@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { loginFailure, loginStart, loginSuccess } from "../redux/slice/userSlice";
 
 export default function Login() {
   const [formData, setFormData] = useState({});
-
+  const dispatch=useDispatch();
+  const {error,loading}=useSelector(state=>state.user)
+  const navigate=useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -12,9 +16,29 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      dispatch(loginStart())
+        const res=await fetch('/api/auth/login',{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json",
+          },
+          body:JSON.stringify(formData)
+        })
+        const data=await res.json();
+        if(!res.ok){
+        return dispatch(loginFailure(data.errorMessage))
+        }
+        dispatch(loginSuccess(data))
+          navigate('/')
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   return (
-    <div className="">
+    <div className=" max-w-lg mx-auto mt-36">
       <h1 className=" text-center text-3xl my-5">Login</h1>
       <form className=" flex flex-col gap-5" onSubmit={handleSubmit}>
         <label className="input input-bordered flex items-center gap-2">
@@ -50,17 +74,20 @@ export default function Login() {
           <input
             type="password"
             className="grow"
-            placeholder="********"
+            placeholder="Password"
             id="password"
             onChange={handleChange}
           />
         </label>
-        <button className="btn btn-outline">Login</button>
+        <button className="btn btn-outline" disabled={loading}>{loading?"Loading":"Login"}</button>
       </form>
       <p className=" text-center my-5">
         Don't have an account?
-        <Link to={"/signup"} className=" text-red-600 pl-2">Click here!</Link>
+        <Link to={"/signup"} className=" text-blue-600 pl-2">Click here!</Link>
       </p>
+      {
+          error && <p className=" text-red-600">{error}</p>
+      }
     </div>
   );
 }

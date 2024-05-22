@@ -12,7 +12,7 @@ export const login = async (req, res, next) => {
     const isPasswordCorrect = bcrypt.compareSync(password, user.password);
 
     if (!isPasswordCorrect)
-      return next(errorHandler(400, "Invalid credentials"));
+      return next(errorHandler(401, "Invalid credentials"));
 
     const { password: pass, ...rest } = user._doc;
 
@@ -27,7 +27,7 @@ export const login = async (req, res, next) => {
 export const signup = async (req, res,next) => {
   const { fullName, username, password, confirmPassword, gender } = req.body;
 
-  if (password !== confirmPassword) return next(400, "Password don't match");
+  if (password !== confirmPassword) return next(errorHandler(400, "Password don't match"));
 
   let user = await User.findOne({ username });
 
