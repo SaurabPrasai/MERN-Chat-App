@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from './slice/userSlice.js'
+import messageReducer from './slice/messageSlice.js'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
 const rootReducer=combineReducers({
-  user:userReducer
+  user:userReducer,
+  message:messageReducer
 })
 
 const persistConfig = {

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MdWavingHand } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
+import { setChatUser } from "../redux/slice/messageSlice";
 
 export default function Siderbar() {
-  const { user } = useSelector((state) => state.user);
   const [users, setUsers] = useState([]);
+  const dispatch=useDispatch();
 
   useEffect(() => {
     const getAllUsers = async () => {
@@ -21,8 +22,13 @@ export default function Siderbar() {
     getAllUsers();
   }, []);
 
+  const userDetails=(user)=>{
+    dispatch(setChatUser(user))
+  }
+  
+
   return (
-    <div className=" w-96 p-3 mx-5 h-screen border border-gray-500 overflow-auto">
+    <div className=" w-96 p-3 mx-5  border border-gray-500 overflow-auto">
       <div className="mb-5">
         <form>
           <label className="input input-bordered flex items-center gap-2">
@@ -51,6 +57,7 @@ export default function Siderbar() {
         <div
           className="flex flex-row overflow-auto  items-center gap-x-4 hover:opacity-90  w-full p-4 hover:bg-gray-700 cursor-default" 
           key={Math.random()}
+          onClick={(()=>userDetails(user))}
         >
           <div className="w-12 rounded-full avatar online">
             <img alt="user" src={user.profilePic} className="w-7" />
