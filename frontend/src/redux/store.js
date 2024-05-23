@@ -12,6 +12,7 @@ const rootReducer=combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['message']
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

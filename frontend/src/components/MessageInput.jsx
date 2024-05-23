@@ -11,6 +11,7 @@ export default function MessageInput() {
   const handleChange = (e) => {
     setMessage(e.target.value);
   };
+  // submitting message 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

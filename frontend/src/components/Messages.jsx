@@ -8,7 +8,7 @@ export default function Messages() {
 
   const lastMessageRef = useRef();
  
-
+  // scrolling to last message
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({behavior:"smooth"})
   }, [messages]);
