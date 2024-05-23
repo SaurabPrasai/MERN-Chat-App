@@ -35,6 +35,7 @@ export default function Signup() {
     }
 
   };
+  console.log(formData)
   return (
     <div className=" max-w-lg mx-auto mt-32">
       <h1 className=" text-center text-3xl my-5">Signup</h1>
@@ -116,8 +117,8 @@ export default function Signup() {
           />
         </label>
         <div className=" flex flex-row justify-center items-center gap-x-3">
-       Male:<input type="checkbox"  className="checkbox" id="gender" name="gender" value={"male"} onChange={handleChange}/>
-       Female:<input type="checkbox" className="checkbox" id="gender" value={"female"} name="gender" onChange={handleChange}/>
+       Male:<input type="radio"  className="checkbox" id="gender" name="gender" value={"male"} onChange={handleChange}/>
+       Female:<input type="radio" className="checkbox" id="gender" value={"female"} name="gender" onChange={handleChange}/>
 
         </div>
         <button className="btn btn-outline" disabled={loading}>{loading?"Loading":"Signup"}</button>
