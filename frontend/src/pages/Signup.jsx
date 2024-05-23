@@ -35,7 +35,6 @@ export default function Signup() {
     }
 
   };
-  console.log(formData)
   return (
     <div className=" max-w-lg mx-auto mt-32">
       <h1 className=" text-center text-3xl my-5">Signup</h1>

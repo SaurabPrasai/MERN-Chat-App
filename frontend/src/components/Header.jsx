@@ -1,8 +1,25 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { logoutSuccess } from "../redux/slice/userSlice";
 
 export default function Header() {
   const { user } = useSelector((state) => state.user);
+  const dispatch=useDispatch();
+
+
+const handleLogout=async()=>{
+  try {
+      const res=await fetch('/api/auth/logout')
+      const data=await res.json()
+      if(!res.ok){
+      return  console.log("Not logged out")
+      }
+      dispatch(logoutSuccess())
+  } catch (error) {
+    console.log(error)
+  }
+}
+
   return (
     <div className="navbar bg-base-100 md:px-20">
       <div className="flex-1">
@@ -46,7 +63,7 @@ export default function Header() {
                 <Link to={""}>Settings</Link>
               </li>
               <li>
-                <Link to={""}>Logout</Link>
+                <Link to={""} onClick={handleLogout}>Logout</Link>
               </li>
             </ul>
           </div>:<Link to={'/login'}>Login</Link>
